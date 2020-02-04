@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -31,6 +32,16 @@ public class DialogHandler extends DialogFragment {
     private Map<String, String> config;
     private String key;
 
+    String[] options = {
+            "Date",
+            "Time",
+            "Duration",
+            "Distance",
+            "Calories",
+            "Heart Rate",
+            "Comment"
+    };
+
     public DialogHandler(String key, Map<String, String> config) {
         this.key = key;
         this.config = config;
@@ -39,6 +50,12 @@ public class DialogHandler extends DialogFragment {
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putString("key", key);
+
+        // not saving config ?
+        for(String key : options) {
+            bundle.putString(key, this.config.get(key));
+        }
+
     }
 
     @Override
@@ -50,6 +67,12 @@ public class DialogHandler extends DialogFragment {
 
         if(savedInstanceState != null) {
             this.key = savedInstanceState.getString("key");
+
+            for(String key : options) {
+                this.config.put(key, savedInstanceState.getString(key));
+            }
+
+            Log.d("johnmacdonald", "second " + this.config.toString());
         }
 
         if(b.getInt(DIALOG_KEY) == DIALOG_OPTION) {
@@ -70,8 +93,8 @@ public class DialogHandler extends DialogFragment {
                 @Override
                 public void onClick(View view) {
                     // save the content inside of the fragment
-                    // Toast.makeText(getContext(), "k: " + key + " v: " + input.getText().toString() + " cv: " + config.get(key), Toast.LENGTH_LONG).show();
-                    config.put(key, input.getText().toString());
+                    ManualEntryActivity.config.put(key, input.getText().toString());
+                    ManualEntryActivity.listAdapter.notifyDataSetChanged();
                     dismiss();
                 }
             });

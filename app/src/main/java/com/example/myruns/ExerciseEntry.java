@@ -4,64 +4,64 @@ import java.util.Calendar;
 
 public class ExerciseEntry {
     private Long id;
-    private int mInputType;  // Manual, GPS or automatic
-    private int mActivityType;     // Running, cycling etc.
-    private Calendar mDateTime;    // When does this entry happen
-    private int mDuration;         // Exercise duration in seconds
-    private float mDistance;      // Distance traveled. Either in meters or feet.
-    private float mAvgPace;       // Average pace
-    private float mAvgSpeed;    // Average speed
-    private int mCalorie;        // Calories burnt
-    private float mClimb;         // Climb. Either in meters or feet.
-    private int mHeartRate;       // Heart rate
-    private String mComment;       // Comments
+    private int mInputType = 1;  // Manual, GPS or automatic
+    private int mActivityType = 1;     // Running, cycling etc.
+    private String mDateTime;    // When does this entry happen
+    private int mDuration = 100;         // Exercise duration in seconds
+    private float mDistance = 250;      // Distance traveled. Either in meters or feet.
+    private float mAvgPace = 25;       // Average pace
+    private float mAvgSpeed = 12;    // Average speed
+    private int mCalorie = 10;        // Calories burnt
+    private float mClimb = 314;         // Climb. Either in meters or feet.
+    private int mHeartRate = 120;       // Heart rate
+    private String mComment = "hello world";       // Comments
     //private ArrayList<LatLng> mLocationList; // Location list
 
     public Long getId() {
         return id;
     }
 
-    public int getmInputType() {
+    public int getInputType() {
         return mInputType;
     }
 
-    public int getmActivityType() {
+    public int getActivityType() {
         return mActivityType;
     }
 
-    public Calendar getmDateTime() {
+    public String getDateTime() {
         return mDateTime;
     }
 
-    public int getmDuration() {
+    public int getDuration() {
         return mDuration;
     }
 
-    public float getmDistance() {
+    public float getDistance() {
         return mDistance;
     }
 
-    public float getmAvgPace() {
+    public float getAvgPace() {
         return mAvgPace;
     }
 
-    public float getmAvgSpeed() {
+    public float getAvgSpeed() {
         return mAvgSpeed;
     }
 
-    public int getmCalorie() {
+    public int getCalorie() {
         return mCalorie;
     }
 
-    public float getmClimb() {
+    public float getClimb() {
         return mClimb;
     }
 
-    public int getmHeartRate() {
+    public int getHeartRate() {
         return mHeartRate;
     }
 
-    public String getmComment() {
+    public String getComment() {
         return mComment;
     }
 
@@ -77,7 +77,7 @@ public class ExerciseEntry {
         this.mActivityType = mActivityType;
     }
 
-    public void setDateTime(Calendar mDateTime) {
+    public void setDateTime(String mDateTime) {
         this.mDateTime = mDateTime;
     }
 
@@ -111,5 +111,19 @@ public class ExerciseEntry {
 
     public void setComment(String mComment) {
         this.mComment = mComment;
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + String.valueOf(this.id) +
+                "date: " + String.valueOf(this.getDateTime()) +
+                "duration: " + String.valueOf(this.getDuration()) +
+                "distance: " + String.valueOf(this.getDistance()) +
+                "avg pace: " + String.valueOf(this.getAvgPace()) +
+                "avg speed: " + String.valueOf(this.getAvgSpeed()) +
+                "calorie: " + String.valueOf(this.getCalorie()) +
+                "climb: " + String.valueOf(this.getClimb()) +
+                "heart: " + String.valueOf(this.getHeartRate()) +
+                "comment: " + this.getComment();
     }
 }

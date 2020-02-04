@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -14,7 +15,10 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +34,12 @@ public class ManualEntryActivity extends AppCompatActivity {
             "Comment"
     };
 
-    Map<String, String> config;
-    ManualEntryListAdapter listAdapter;
+    static Map<String, String> config;
+    static ManualEntryListAdapter listAdapter;
     String DIALOG_TYPE = "";
     ListView list;
+
+    EntryDataSource database;
 
     int savedYear = 0;
     int savedMonth = 0;
@@ -49,6 +55,16 @@ public class ManualEntryActivity extends AppCompatActivity {
 
         this.config = new HashMap<String, String>();
 
+        /*
+        "Date",
+            "Time",
+            "Duration",
+            "Distance",
+            "Calories",
+            "Heart Rate",
+            "Comment"
+         */
+
         final Calendar c = Calendar.getInstance();
 
         savedYear = c.get(Calendar.YEAR);
@@ -57,11 +73,22 @@ public class ManualEntryActivity extends AppCompatActivity {
         savedHour = c.get(Calendar.HOUR_OF_DAY);
         savedMinute = c.get(Calendar.MINUTE);
 
+        this.database = new EntryDataSource(this);
+        this.database.open();
+
         Bundle intentData = getIntent().getExtras();
 
         for(String option:this.options) {
             this.config.put(option, "");
         }
+
+        this.config.put("Date", "");
+        this.config.put("Time", "");
+        this.config.put("Calories", "0");
+        this.config.put("Distance", "0");
+        this.config.put("Duration", "0");
+        this.config.put("Heart Rate", "0");
+        this.config.put("Comment", "");
 
         this.listAdapter = new ManualEntryListAdapter(ManualEntryActivity.this, options, config);
         this.list = findViewById(R.id.list);
@@ -85,8 +112,11 @@ public class ManualEntryActivity extends AppCompatActivity {
             savedMinute = savedInstanceState.getInt("minute");
 
             for(String option:this.options) {
+                Log.d("johnmacdonald", option + " - " + savedInstanceState.getString(option));
                 this.config.put(option, savedInstanceState.getString(option));
             }
+
+            Log.d("johnmacdonald", this.config.toString());
 
             if(DIALOG_TYPE != null) {
                 switch (DIALOG_TYPE) {
@@ -117,6 +147,41 @@ public class ManualEntryActivity extends AppCompatActivity {
         bundle.putInt("minute", savedMinute);
 
         bundle.putString("DIALOG_TYPE", DIALOG_TYPE);
+    }
+
+    public void saveNewEntry(View view) {
+        // use new thread to write to the database
+        // add to the history fragment list adapter
+        // notify change has occurred
+        // handle metric to imperial conversion
+        // {Heart Rate=100, Comment=Good Night, Time=16:24, Duration=100, Date=2020-2-14, Distance=355, Calories=300}
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // insert new record into database
+                final ExerciseEntry entry = new ExerciseEntry();
+
+                entry.setDateTime(config.get("Date") + " " + config.get("Time"));
+                entry.setComment(config.get("Comment"));
+
+                entry.setDuration(Integer.valueOf(config.get("Duration")));
+                entry.setDistance(Float.valueOf(config.get("Distance")));
+                entry.setCalorie(Integer.valueOf(config.get("Calories")));
+                entry.setHeartRate(Integer.valueOf(config.get("Heart Rate")));
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        History.entries.add(entry);
+                        History.listAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                database.createEntry(entry);
+                finish();
+            }
+        }).start();
     }
 
     public void launchDateModal() {

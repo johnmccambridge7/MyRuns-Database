@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Map;
 
-public class HistoryListAdapter extends ArrayAdapter<String> {
+public class HistoryListAdapter extends ArrayAdapter<ExerciseEntry> {
     private final Activity context;
-    private final String[] options;
+    private final ArrayList<ExerciseEntry> options;
 
-    public HistoryListAdapter(Activity context, String[] options) {
+    public HistoryListAdapter(Activity context, ArrayList<ExerciseEntry> options) {
         super(context, R.layout.manual_entry_choice, options);
         this.context = context;
         this.options = options;
@@ -26,7 +27,10 @@ public class HistoryListAdapter extends ArrayAdapter<String> {
         TextView txtTitle = (TextView) rowView.findViewById(R.id.historyTitle);
         TextView subTitle = rowView.findViewById(R.id.historySubtitle);
 
-        txtTitle.setText(options[position]);
+        ExerciseEntry entry = options.get(position);
+
+        txtTitle.setText(entry.getComment());
+        subTitle.setText(entry.getDateTime());
 
         return rowView;
     }
