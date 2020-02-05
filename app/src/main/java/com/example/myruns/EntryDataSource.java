@@ -137,6 +137,12 @@ public class EntryDataSource {
         database.update(SQLiteHelper.ENTRIES_TABLE, values, null, null);
     }
 
+    public void updateEntryDistance(Long id, float distance) {
+        ContentValues values = new ContentValues();
+        values.put(SQLiteHelper.DISTANCE, distance);
+        database.update(SQLiteHelper.ENTRIES_TABLE, values, SQLiteHelper.PRIMARY_KEY + " = " + String.valueOf(id), null);
+    }
+
     public ArrayList<ExerciseEntry> getAllEntries() {
         Cursor c = database.query(SQLiteHelper.ENTRIES_TABLE, columns, null, null, null, null, null);
         c.moveToFirst();

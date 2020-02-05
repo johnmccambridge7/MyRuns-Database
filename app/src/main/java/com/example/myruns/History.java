@@ -97,13 +97,17 @@ public class History extends Fragment {
 
                     if(!e.getUnits().equals(storedUnit)) {
                         // needs to be converted
+                        float d;
                         if(e.getUnits().equals("imperial")) {
                             // miles to kilometers
-                            e.setDistance(1.60f * distance);
+                            d = (1.609f * distance);
                         } else {
                             // kilometers to miles
-                            e.setDistance(distance / 1.60f);
+                            d = (distance / 1.609f);
                         }
+
+                        e.setDistance(d);
+                        database.updateEntryDistance(e.getId(), d);
                     }
 
                     e.setUnits(storedUnit);
