@@ -15,7 +15,9 @@ public class ExerciseEntry {
     private float mClimb = 314;         // Climb. Either in meters or feet.
     private int mHeartRate = 120;       // Heart rate
     private String mComment = "hello world";       // Comments
+    private String units = "metric";
     //private ArrayList<LatLng> mLocationList; // Location list
+    public String getUnits() { return this.units; }
 
     public Long getId() {
         return id;
@@ -67,6 +69,10 @@ public class ExerciseEntry {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 
     public void setInputType(int mInputType) {

@@ -1,6 +1,8 @@
 package com.example.myruns;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.lang.annotation.ElementType;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -20,18 +24,20 @@ import java.util.ArrayList;
 public class History extends Fragment {
 
     public static HistoryListAdapter listAdapter;
-    ListView list;
+    public static ListView list;
 
-    private EntryDataSource database;
+    private static EntryDataSource database;
     public static ArrayList<ExerciseEntry> entries;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         this.entries = new ArrayList<ExerciseEntry>();
         this.database = new EntryDataSource(getActivity());
         this.database.open();
+
         this.listAdapter = new HistoryListAdapter(getActivity(), this.entries);
 
         // database.deleteAllEntries();
@@ -61,15 +67,7 @@ public class History extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), HistoryEntryActivity.class);
-                //i.putExtra("activityType", this.selectedActivity);
                 ExerciseEntry entry = entries.get(i);
-
-                /*
-                   this.activityType.setText(i.getStringExtra("activityType"));
-                this.date.setText(i.getStringExtra("date"));
-                this.duration.setText(i.getStringExtra("duration"));
-                this.distance.setText(i.getStringExtra("distance"));
-                 */
 
                 intent.putExtra("inputType", "Manual Entry");
                 intent.putExtra("activityType", entry.getActivityType());
@@ -79,13 +77,45 @@ public class History extends Fragment {
                 intent.putExtra("comment", entry.getComment());
                 intent.putExtra("calories", String.valueOf(entry.getCalorie()) + "cals");
                 intent.putExtra("heartRate", String.valueOf(entry.getHeartRate()) + " bpm");
-
-                Log.d("johnmacdonald", "ID: " + String.valueOf(entry.getId()));
+                intent.putExtra("entryID", String.valueOf(entry.getId()));
+                intent.putExtra("position", i);
 
                 startActivity(intent);
             }
         });
 
         return view;
+    }
+
+    public static void refreshList(final String storedUnit) {
+        // remove all elements and add them back then redraw list
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(ExerciseEntry e : entries) {
+                    float distance = e.getDistance();
+
+                    if(!e.getUnits().equals(storedUnit)) {
+                        // needs to be converted
+                        if(e.getUnits().equals("imperial")) {
+                            // miles to kilometers
+                            e.setDistance(1.60f * distance);
+                        } else {
+                            // kilometers to miles
+                            e.setDistance(distance / 1.60f);
+                        }
+                    }
+
+                    e.setUnits(storedUnit);
+                }
+
+                database.updateUnits(storedUnit);
+            }
+        }).start();
+    }
+
+    public static void removeItem(int d) {
+        entries.remove(d);
+        Log.d("johnmacdonald", "Removed item at index " + String.valueOf(d));
     }
 }

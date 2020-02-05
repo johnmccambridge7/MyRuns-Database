@@ -12,6 +12,9 @@ import android.widget.EditText;
 
 public class HistoryEntryActivity extends AppCompatActivity {
 
+    String entryID;
+    Integer position;
+
     EditText activityType;
     EditText date;
     EditText duration;
@@ -19,6 +22,8 @@ public class HistoryEntryActivity extends AppCompatActivity {
     EditText calories;
     EditText heartRate;
     EditText inputType;
+
+    EntryDataSource database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,11 @@ public class HistoryEntryActivity extends AppCompatActivity {
         this.calories.setText(i.getStringExtra("calories"));
         this.heartRate.setText(i.getStringExtra("heartRate"));
         this.inputType.setText(i.getStringExtra("inputType"));
+        this.entryID = i.getStringExtra("entryID");
+        this.position = i.getIntExtra("position", 0);
+
+        this.database = new EntryDataSource(this);
+        this.database.open();
     }
 
     @Override
@@ -62,11 +72,25 @@ public class HistoryEntryActivity extends AppCompatActivity {
     }
 
     public void deleteEntry(MenuItem item) {
-        // new thread to delete entry
-        // close activity
-        // refresh adapter
+        // new thread to delete entry - DONE
+        // close activity - DONE
+        // refresh adapter - DONE
         // need to handle metric change
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                database.deleteEntry(Integer.valueOf(entryID));
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        History.removeItem(position);
+                        History.listAdapter.notifyDataSetChanged();
+                        finish();
+                    }
+                });
+            }
+        }).start();
+
     }
-
-
 }

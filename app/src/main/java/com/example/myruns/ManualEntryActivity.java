@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -149,6 +151,8 @@ public class ManualEntryActivity extends AppCompatActivity {
         // handle metric to imperial conversion
         // {Heart Rate=100, Comment=Good Night, Time=16:24, Duration=100, Date=2020-2-14, Distance=355, Calories=300}
 
+        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -162,6 +166,10 @@ public class ManualEntryActivity extends AppCompatActivity {
                 entry.setDistance(Float.valueOf(config.get("Distance")));
                 entry.setCalorie(Integer.valueOf(config.get("Calories")));
                 entry.setHeartRate(Integer.valueOf(config.get("Heart Rate")));
+
+                // get the stored unit - default metric
+                String storedUnit = sharedPref.getString("unit", "metric");
+                entry.setUnits(storedUnit);
 
                 final ExerciseEntry inserted = database.createEntry(entry);
 

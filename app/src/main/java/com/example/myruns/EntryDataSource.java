@@ -41,7 +41,8 @@ public class EntryDataSource {
                                 SQLiteHelper.HEARTRATE,
                                 SQLiteHelper.COMMENT,
                                 SQLiteHelper.PRIVACY,
-                                SQLiteHelper.GPS_DATA};
+                                SQLiteHelper.GPS_DATA,
+                                SQLiteHelper.UNITS};
 
     public EntryDataSource(Context c) {
         helper = new SQLiteHelper(c);
@@ -69,7 +70,8 @@ public class EntryDataSource {
         values.put(SQLiteHelper.HEARTRATE, entry.getHeartRate());
         values.put(SQLiteHelper.COMMENT, entry.getComment());
         values.put(SQLiteHelper.PRIVACY, 1);
-        values.put(SQLiteHelper.GPS_DATA, "this is a test");
+        values.put(SQLiteHelper.GPS_DATA, "example GPS data");
+        values.put(SQLiteHelper.UNITS, entry.getUnits());
 
         long recordID = database.insert(SQLiteHelper.ENTRIES_TABLE, null, values);
         Cursor cursor = database.query(SQLiteHelper.ENTRIES_TABLE,
@@ -81,6 +83,10 @@ public class EntryDataSource {
         ExerciseEntry e = convertCursorToEntry(cursor);
 
         return e;
+    }
+
+    public void deleteEntry(int id) {
+        database.delete(SQLiteHelper.ENTRIES_TABLE, SQLiteHelper.PRIMARY_KEY + " = " + id, null);
     }
 
     public ExerciseEntry convertCursorToEntry(Cursor c) {
@@ -115,12 +121,20 @@ public class EntryDataSource {
         e.setClimb(c.getFloat(9));
         e.setHeartRate(c.getInt(10));
         e.setComment(c.getString(11));
+        e.setUnits(c.getString(14));
 
         return e;
     }
 
     public void deleteAllEntries() {
         database.delete(SQLiteHelper.ENTRIES_TABLE, null, null);
+    }
+
+    public void updateUnits(String newUnit) {
+        ContentValues values = new ContentValues();
+        values.put(SQLiteHelper.UNITS, newUnit);
+
+        database.update(SQLiteHelper.ENTRIES_TABLE, values, null, null);
     }
 
     public ArrayList<ExerciseEntry> getAllEntries() {

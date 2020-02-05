@@ -1,6 +1,9 @@
 package com.example.myruns;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +32,15 @@ public class HistoryListAdapter extends ArrayAdapter<ExerciseEntry> {
 
         ExerciseEntry entry = options.get(position);
 
+        String unit = " kilometers ";
+
+        if(entry.getUnits().equals("imperial")) {
+            // convert value too
+            unit = " miles ";
+        }
+
         txtTitle.setText("Manual Entry: " + entry.getActivityType() + ", " + entry.getDateTime());
-        subTitle.setText(String.valueOf(entry.getDistance()) + " Miles " + String.valueOf(entry.getDuration()) + " mins and 0 secs");
+        subTitle.setText(String.valueOf(entry.getDistance()) + unit + String.valueOf(entry.getDuration()) + " mins and 0 secs");
 
         return rowView;
     }

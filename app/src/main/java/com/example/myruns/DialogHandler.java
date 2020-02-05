@@ -130,6 +130,9 @@ public class DialogHandler extends DialogFragment {
                 public void onClick(View v) {
                     editor.putString("unit", "metric");
                     editor.commit();
+
+                    History.refreshList("metric");
+                    History.listAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -137,6 +140,9 @@ public class DialogHandler extends DialogFragment {
                 public void onClick(View v) {
                     editor.putString("unit", "imperial");
                     editor.commit();
+
+                    History.refreshList("imperial");
+                    History.listAdapter.notifyDataSetChanged();
                 }
             });
 

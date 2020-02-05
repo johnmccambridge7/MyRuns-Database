@@ -41,7 +41,7 @@ public class ManualEntryListAdapter extends ArrayAdapter<String> {
                 suffix = "cals";
                 break;
             case "Distance":
-                suffix = "kms";
+                suffix = "units";
                 break;
             case "Heart Rate":
                 suffix = "bpm";
