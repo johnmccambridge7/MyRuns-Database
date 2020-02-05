@@ -1,10 +1,13 @@
 package com.example.myruns;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,8 @@ public class Start extends Fragment {
     private static final String MANUAL_INPUT = "Manual Input";
     private static final String GPS = "GPS";
     private static final String AUTOMATIC = "Automatic";
+
+    private String unit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +90,11 @@ public class Start extends Fragment {
             case MANUAL_INPUT:
                 i = new Intent(getActivity(), ManualEntryActivity.class);
                 i.putExtra("activityType", this.selectedActivity);
+
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                this.unit = sharedPref.getString("unit", "metriccc");
+
+                i.putExtra("units", this.unit);
                 startActivity(i);
                 break;
             case GPS:

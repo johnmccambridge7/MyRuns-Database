@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class HistoryEntryActivity extends AppCompatActivity {
 
@@ -84,6 +85,7 @@ public class HistoryEntryActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Toast.makeText(getApplicationContext(), "Entry Deleted!", Toast.LENGTH_LONG).show();
                         History.removeItem(position);
                         History.listAdapter.notifyDataSetChanged();
                         finish();

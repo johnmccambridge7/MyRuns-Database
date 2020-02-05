@@ -41,6 +41,7 @@ public class ManualEntryActivity extends AppCompatActivity {
     static Map<String, String> config;
     static ManualEntryListAdapter listAdapter;
     String DIALOG_TYPE = "";
+    String units = "metric";
     ListView list;
 
     EntryDataSource database;
@@ -71,6 +72,8 @@ public class ManualEntryActivity extends AppCompatActivity {
         this.database.open();
 
         Bundle intentData = getIntent().getExtras();
+
+        this.units = intentData.getString("units");
 
         for(String option:this.options) {
             this.config.put(option, "");
@@ -146,12 +149,13 @@ public class ManualEntryActivity extends AppCompatActivity {
         // use new thread to write to the database DONE
         // add to the history fragment list adapter DONE
         // notify change has occurred DONE
-        // handle clicking and viewing data
-        // handle deleting data
-        // handle metric to imperial conversion
+        // handle clicking and viewing data DONE
+        // handle deleting data DONE
+        // handle metric to imperial conversion DONE-ISH
         // {Heart Rate=100, Comment=Good Night, Time=16:24, Duration=100, Date=2020-2-14, Distance=355, Calories=300}
 
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String storedUnit = sharedPref.getString("unit", "metric");
 
         new Thread(new Runnable() {
             @Override
@@ -168,8 +172,7 @@ public class ManualEntryActivity extends AppCompatActivity {
                 entry.setHeartRate(Integer.valueOf(config.get("Heart Rate")));
 
                 // get the stored unit - default metric
-                String storedUnit = sharedPref.getString("unit", "metric");
-                entry.setUnits(storedUnit);
+                entry.setUnits(units);
 
                 final ExerciseEntry inserted = database.createEntry(entry);
 
@@ -178,6 +181,7 @@ public class ManualEntryActivity extends AppCompatActivity {
                     public void run() {
                         History.entries.add(inserted);
                         History.listAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "New Entry Success!", Toast.LENGTH_LONG).show();
                     }
                 });
 
