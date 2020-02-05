@@ -24,6 +24,8 @@ import java.util.Map;
 
 public class ManualEntryActivity extends AppCompatActivity {
 
+    String activityType = "None";
+
     String[] options = {
             "Date",
             "Time",
@@ -55,16 +57,6 @@ public class ManualEntryActivity extends AppCompatActivity {
 
         this.config = new HashMap<String, String>();
 
-        /*
-        "Date",
-            "Time",
-            "Duration",
-            "Distance",
-            "Calories",
-            "Heart Rate",
-            "Comment"
-         */
-
         final Calendar c = Calendar.getInstance();
 
         savedYear = c.get(Calendar.YEAR);
@@ -90,6 +82,8 @@ public class ManualEntryActivity extends AppCompatActivity {
         this.config.put("Heart Rate", "0");
         this.config.put("Comment", "");
 
+        this.activityType = intentData.getString("activityType");
+
         this.listAdapter = new ManualEntryListAdapter(ManualEntryActivity.this, options, config);
         this.list = findViewById(R.id.list);
         this.list.setAdapter(listAdapter);
@@ -112,11 +106,8 @@ public class ManualEntryActivity extends AppCompatActivity {
             savedMinute = savedInstanceState.getInt("minute");
 
             for(String option:this.options) {
-                Log.d("johnmacdonald", option + " - " + savedInstanceState.getString(option));
-                this.config.put(option, savedInstanceState.getString(option));
+                config.put(option, savedInstanceState.getString(option));
             }
-
-            Log.d("johnmacdonald", this.config.toString());
 
             if(DIALOG_TYPE != null) {
                 switch (DIALOG_TYPE) {
@@ -150,9 +141,11 @@ public class ManualEntryActivity extends AppCompatActivity {
     }
 
     public void saveNewEntry(View view) {
-        // use new thread to write to the database
-        // add to the history fragment list adapter
-        // notify change has occurred
+        // use new thread to write to the database DONE
+        // add to the history fragment list adapter DONE
+        // notify change has occurred DONE
+        // handle clicking and viewing data
+        // handle deleting data
         // handle metric to imperial conversion
         // {Heart Rate=100, Comment=Good Night, Time=16:24, Duration=100, Date=2020-2-14, Distance=355, Calories=300}
 
@@ -164,21 +157,22 @@ public class ManualEntryActivity extends AppCompatActivity {
 
                 entry.setDateTime(config.get("Date") + " " + config.get("Time"));
                 entry.setComment(config.get("Comment"));
-
+                entry.setActivityType(activityType);
                 entry.setDuration(Integer.valueOf(config.get("Duration")));
                 entry.setDistance(Float.valueOf(config.get("Distance")));
                 entry.setCalorie(Integer.valueOf(config.get("Calories")));
                 entry.setHeartRate(Integer.valueOf(config.get("Heart Rate")));
 
+                final ExerciseEntry inserted = database.createEntry(entry);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        History.entries.add(entry);
+                        History.entries.add(inserted);
                         History.listAdapter.notifyDataSetChanged();
                     }
                 });
 
-                database.createEntry(entry);
                 finish();
             }
         }).start();

@@ -29,8 +29,8 @@ public class HistoryListAdapter extends ArrayAdapter<ExerciseEntry> {
 
         ExerciseEntry entry = options.get(position);
 
-        txtTitle.setText(entry.getComment());
-        subTitle.setText(entry.getDateTime());
+        txtTitle.setText("Manual Entry: " + entry.getActivityType() + ", " + entry.getDateTime());
+        subTitle.setText(String.valueOf(entry.getDistance()) + " Miles " + String.valueOf(entry.getDuration()) + " mins and 0 secs");
 
         return rowView;
     }

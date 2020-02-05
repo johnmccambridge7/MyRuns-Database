@@ -24,13 +24,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String GPS_DATA = "gps_data";
 
     private static final String DATABASE_NAME = "entries.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DB_CREATION =
                      "CREATE TABLE IF NOT EXISTS " + ENTRIES_TABLE + " (\n" +
             "        " + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
             "        " + INPUT_TYPE + " INTEGER NOT NULL, \n" +
-            "        " + ACTIVITY_TYPE + " INTEGER NOT NULL, \n" +
+            "        " + ACTIVITY_TYPE + " TEXT NOT NULL, \n" +
             "        " + DATE_TIME + " DATETIME NOT NULL, \n" +
             "        " + DURATION + " INTEGER NOT NULL, \n" +
             "        " + DISTANCE + " REAL, \n" +

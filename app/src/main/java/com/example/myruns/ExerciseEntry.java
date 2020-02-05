@@ -5,7 +5,7 @@ import java.util.Calendar;
 public class ExerciseEntry {
     private Long id;
     private int mInputType = 1;  // Manual, GPS or automatic
-    private int mActivityType = 1;     // Running, cycling etc.
+    private String mActivityType = "Running";     // Running, cycling etc.
     private String mDateTime;    // When does this entry happen
     private int mDuration = 100;         // Exercise duration in seconds
     private float mDistance = 250;      // Distance traveled. Either in meters or feet.
@@ -25,7 +25,7 @@ public class ExerciseEntry {
         return mInputType;
     }
 
-    public int getActivityType() {
+    public String getActivityType() {
         return mActivityType;
     }
 
@@ -73,7 +73,7 @@ public class ExerciseEntry {
         this.mInputType = mInputType;
     }
 
-    public void setActivityType(int mActivityType) {
+    public void setActivityType(String mActivityType) {
         this.mActivityType = mActivityType;
     }
 

@@ -13,6 +13,21 @@
         android:padding="15dp">
 
         <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Input Type" />
+
+        <EditText
+            android:id="@+id/inputType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName" />
+
+        <TextView
             android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,6 +39,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:inputType="textPersonName" />
 
         <TextView
@@ -38,6 +54,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:inputType="textPersonName" />
 
         <TextView
@@ -52,6 +69,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:inputType="textPersonName" />
 
         <TextView
@@ -66,6 +84,35 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calories" />
+
+        <EditText
+            android:id="@+id/calories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Heart Rate" />
+
+        <EditText
+            android:id="@+id/heartRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
             android:inputType="textPersonName" />
 
     </LinearLayout>

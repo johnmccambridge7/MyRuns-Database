@@ -9,7 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 /*
-public static final String PRIMARY_KEY = "_id";
+    public static final String PRIMARY_KEY = "_id";
     public static final String INPUT_TYPE = "input_type";
     public static final String ACTIVITY_TYPE = "activity_type";
     public static final String DATE_TIME = "date_time";
@@ -72,14 +72,15 @@ public class EntryDataSource {
         values.put(SQLiteHelper.GPS_DATA, "this is a test");
 
         long recordID = database.insert(SQLiteHelper.ENTRIES_TABLE, null, values);
-        //Cursor cursor = database.query(SQLiteHelper.ENTRIES_TABLE,
-                //columns,
-                //SQLiteHelper.PRIMARY_KEY + " = " + recordID, null, null, null, null);
+        Cursor cursor = database.query(SQLiteHelper.ENTRIES_TABLE,
+                columns,
+                SQLiteHelper.PRIMARY_KEY + " = " + recordID, null, null, null, null);
 
-        //cursor.moveToFirst();
-        //Log.d("johnmacdonald", String.valueOf(entry.getAvgSpeed()));
-        //Log.d("johnmacdonald", String.valueOf(recordID));
-        return entry;
+        cursor.moveToFirst();
+
+        ExerciseEntry e = convertCursorToEntry(cursor);
+
+        return e;
     }
 
     public ExerciseEntry convertCursorToEntry(Cursor c) {
@@ -104,7 +105,7 @@ public class EntryDataSource {
          */
         e.setId(c.getLong(0));
         e.setInputType(c.getInt(1));
-        e.setActivityType(c.getInt(2));
+        e.setActivityType(c.getString(2));
         e.setDateTime(c.getString(3));
         e.setDuration(c.getInt(4));
         e.setDistance(c.getInt(5));

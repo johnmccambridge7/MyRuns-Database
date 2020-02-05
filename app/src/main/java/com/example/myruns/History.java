@@ -32,7 +32,6 @@ public class History extends Fragment {
         this.entries = new ArrayList<ExerciseEntry>();
         this.database = new EntryDataSource(getActivity());
         this.database.open();
-
         this.listAdapter = new HistoryListAdapter(getActivity(), this.entries);
 
         // database.deleteAllEntries();
@@ -62,7 +61,27 @@ public class History extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), HistoryEntryActivity.class);
-                // i.putExtra("activityType", this.selectedActivity);
+                //i.putExtra("activityType", this.selectedActivity);
+                ExerciseEntry entry = entries.get(i);
+
+                /*
+                   this.activityType.setText(i.getStringExtra("activityType"));
+                this.date.setText(i.getStringExtra("date"));
+                this.duration.setText(i.getStringExtra("duration"));
+                this.distance.setText(i.getStringExtra("distance"));
+                 */
+
+                intent.putExtra("inputType", "Manual Entry");
+                intent.putExtra("activityType", entry.getActivityType());
+                intent.putExtra("date", entry.getDateTime());
+                intent.putExtra("duration", String.valueOf(entry.getDuration()) + " mins and 0 secs");
+                intent.putExtra("distance", String.valueOf(entry.getDistance()) + " Miles");
+                intent.putExtra("comment", entry.getComment());
+                intent.putExtra("calories", String.valueOf(entry.getCalorie()) + "cals");
+                intent.putExtra("heartRate", String.valueOf(entry.getHeartRate()) + " bpm");
+
+                Log.d("johnmacdonald", "ID: " + String.valueOf(entry.getId()));
+
                 startActivity(intent);
             }
         });
