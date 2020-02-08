@@ -51,11 +51,9 @@ public class DialogHandler extends DialogFragment {
         super.onSaveInstanceState(bundle);
         bundle.putString("key", key);
 
-        // not saving config ?
         for(String key : options) {
             bundle.putString(key, this.config.get(key));
         }
-
     }
 
     @Override
@@ -71,8 +69,6 @@ public class DialogHandler extends DialogFragment {
             for(String key : options) {
                 this.config.put(key, savedInstanceState.getString(key));
             }
-
-            Log.d("johnmacdonald", "second " + this.config.toString());
         }
 
         if(b.getInt(DIALOG_KEY) == DIALOG_OPTION) {
